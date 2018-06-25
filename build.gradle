@@ -22,6 +22,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.palantir.docker'
 // end::plugin[]
 
+
 // This is used as the docker image prefix (org)
 group = 'summer-sdge'
 println "appReleaseVersion : ${appReleaseVersion}"
