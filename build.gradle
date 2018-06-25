@@ -30,11 +30,11 @@ bootJar {
 //    version =  '0.1.0'
     version =  '${release.version}'
 }
-
+println "appReleaseVersion : ${appReleaseVersion}"
 // tag::task[]
 docker {
     dependsOn build
-    name "${project.group}/${bootJar.baseName}"
+    name "${project.group}/${bootJar.baseName}:${appReleaseVersion}"
     files bootJar.archivePath
     buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
 }
