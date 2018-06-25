@@ -24,12 +24,12 @@ apply plugin: 'com.palantir.docker'
 
 // This is used as the docker image prefix (org)
 group = 'summer-sdge'
-println "appReleaseVersion : ${appReleaseMajorVersion}.${appReleaseMinorVersion}"
+println "appReleaseVersion : ${appReleaseVersion}"
 
 bootJar {
     baseName = 'gs-spring-boot-docker'
 //    version =  '0.1.0'
-    version =  '${release.version}'
+    version =  '${appReleaseVersion}'
 }
 
 
