@@ -6,10 +6,21 @@ pipeline {
         }
     }
     stages {
-        stage('Build') { 
+        stage('Build Classes') { 
             steps {
-                sh 'gradle build' 
+                sh 'gradle classes' 
             }
         }
+        stage('Run Tests') { 
+            steps {
+                sh 'gradle test' 
+            }
+        }
+        stage('Build Package with label') { 
+            steps {
+                sh 'gradle docker' 
+            }
+        }
+
     }
 }

@@ -23,11 +23,12 @@ apply plugin: 'com.palantir.docker'
 // end::plugin[]
 
 // This is used as the docker image prefix (org)
-group = 'springio'
+group = 'summer-sdge'
 
 bootJar {
     baseName = 'gs-spring-boot-docker'
-    version =  '0.1.0'
+//    version =  '0.1.0'
+    version =  '${release.version}'
 }
 
 // tag::task[]
