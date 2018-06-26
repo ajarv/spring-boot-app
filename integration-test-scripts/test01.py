@@ -27,7 +27,7 @@ class TestGreetingService(unittest.TestCase):
         r1 = conn.getresponse()
         print r1.status, r1.reason
         self.assertEqual(r1.status, 200)
-        data = json.load(r)
+        data = json.load(r1)
         self.assertEqual(data['version'] ,'2.0')
 
 
