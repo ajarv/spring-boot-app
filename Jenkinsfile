@@ -69,7 +69,6 @@ pipeline {
                 echo 'Start new container version'
                 sh "docker run -t --rm --name ${properties.appName} summer-sdge/gs-spring-boot-docker:${properties.appReleaseVersion}"
                 echo 'New Version Started'
-                sleep 4
             }
         }
         stage('Run Integration Tests'){
