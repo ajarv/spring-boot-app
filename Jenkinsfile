@@ -23,7 +23,7 @@ pipeline {
         }
         stage('Build Image') { 
             steps {
-                sh 'gradle docker_image'
+                sh 'gradle docker_image --stacktrace'
             }
         }
     }
