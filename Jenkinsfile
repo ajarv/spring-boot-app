@@ -6,24 +6,7 @@ pipeline {
         }
     }
     stages {
-        stage('Build Classes') { 
-            steps {
-                sh 'gradle classes' 
-            }
-        }
-        stage('Run Tests') { 
-            steps {
-                sh 'gradle test' 
-            }
-        }
-        stage('Prepare Folder') { 
-            steps {
-                sh '''
-                echo "Preparing Docker Build Folder"
-                gradle dockerPrepare
-                '''
-            }
-        }
+        
         stage('Build Image') { 
             agent none
             steps {
@@ -31,7 +14,8 @@ pipeline {
                 pwd
                 . ./gradle.properties
                 cd build/docker
-                docker build -t summer-sdge/gs-spring-boot-docker:test  .
+                which docker            
+                // docker build -t summer-sdge/gs-spring-boot-docker:test  .
                 '''
             }
         }
