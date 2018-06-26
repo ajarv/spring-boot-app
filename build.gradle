@@ -48,6 +48,8 @@ ext {
 println ("Docker Image Tag: ${docker_image_tag}")
 task docker_image(type:Exec) {
   dependsOn build
+
+  workingDir '/tmp'
   //on windows:
   commandLine 'docker', 'build', '-t', "${docker_image_tag}" , 'C:\\temp\\jenkins-data\\jobs\\springboot-java-app\\workspace\\build\\docker'
   ext.output = {
