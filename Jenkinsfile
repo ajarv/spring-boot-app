@@ -18,7 +18,7 @@ pipeline {
         }
         stage('Build Package with label') { 
             steps {
-                sh 'gradle docker --info' 
+                sh 'gradle docker --stacktrace' 
             }
         }
 
