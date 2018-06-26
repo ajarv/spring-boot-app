@@ -48,7 +48,7 @@ pipeline {
     }
     post {
         always {
-            junit 'test-reports/results.xml'
+            echo 'Build Completed ${currentBuild.fullDisplayName} Status:  ${currentBuild.result}'
         }
         success {
             // notify users when the Pipeline fails
