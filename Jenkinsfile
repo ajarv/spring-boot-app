@@ -5,7 +5,6 @@ def loadProperties() {
     node {
         checkout scm
         properties = readProperties file: 'gradle.properties'
-        echo "appReleaseVersion - ${properties.appReleaseVersion}"
     }
 }
 
@@ -45,13 +44,13 @@ pipeline {
                 echo 'Building Docker Image'
                 script {
                     loadProperties()
-                    echo "appReleaseVersion ${properties.appReleaseVersion}"
+                    echo "New appReleaseVersion ${properties.appReleaseVersion}"
                 }
-                echo 'App Release Version ${env.appReleaseVersion}' 
-                sh 'docker build -t summer-sdge/gs-spring-boot-docker:1.0.1 ./build/docker' 
+                echo 'Building Docker Image with tag label ${env.appReleaseVersion}' 
+                sh 'docker build -t summer-sdge/gs-spring-boot-docker:${properties.appReleaseVersion} ./build/docker' 
             }
         }
-        stage('Package Docker Image') { 
+        stage('Deploy in Dev') { 
             agent {
                 docker {
                     image 'jenkinsci/blueocean' 
@@ -59,22 +58,21 @@ pipeline {
                 }
             }
             steps {
-                echo 'Building Docker'
                 script {
-                    def props = readProperties file:'gradle.properties';
-                    env['appReleaseVersion'] = props['appReleaseVersion'];
+                    loadProperties()
+                    echo "New appReleaseVersion ${properties.appReleaseVersion}"
+                    echo "Existing appReleaseVersionCurrent ${properties.appReleaseVersionCurrent}"
                 }
-                sh 'pwd'
-                sh 'ls -al'
-                sh 'docker'
-                sleep 4
-            }
-        }
-        stage('Deploy in Dev') { 
-            steps {
-                echo 'Stop the previous container version if running'
+                try {
+                    echo 'Attempting to stop existing docker instance ${env.appReleaseVersion}' 
+                    sh "docker rm -f --name ${properties.appName}"
+                } catch (err) {
+                    echo "- No current instance found "
+                }
                 sleep 4
                 echo 'Start new container version'
+                sh "docker run -t --rm --name ${properties.appName} summer-sdge/gs-spring-boot-docker:${properties.appReleaseVersion}"
+                echo 'New Version Started'
                 sleep 4
             }
         }
