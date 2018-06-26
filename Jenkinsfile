@@ -11,48 +11,6 @@ def loadProperties() {
 pipeline {
     agent none
     stages {
-    agent none
-    stages {
-        stage('Build - Unit Test') { 
-            agent {
-                docker {
-                    image 'gradle:jdk8-alpine' 
-                    args '-u root -v /var/jenkins_home/.m2:/root/.m2' 
-                }
-            }
-            steps {
-                sh 'gradle build' 
-            }
-        }
-        stage('Prepare Docker Files') { 
-            agent {
-                docker {
-                    image 'gradle:jdk8-alpine' 
-                    args '-u root -v /var/jenkins_home/.m2:/root/.m2' 
-                }
-            }
-            steps {
-                sh 'gradle dockerPrepare' 
-            }
-        }
-        stage('Build Docker Image') { 
-            agent {
-                docker {
-                    image 'jenkinsci/blueocean' 
-                    args '-v /var/run/docker.sock:/var/run/docker.sock' 
-                }
-            }
-            steps {
-                echo 'Building Docker Image'
-                script {
-                    loadProperties()
-                    echo "New appReleaseVersion ${properties.appReleaseVersion}"
-                }
-                echo "Building Docker Image with tag label ${properties.appReleaseVersion}" 
-                sleep 4
-                // sh "docker build -t summer-sdge/gs-spring-boot-docker:${properties.appReleaseVersion}  ./build/docker"
-            }
-        }
         stage('Deploy in Dev') { 
             agent {
                 docker {
@@ -103,5 +61,4 @@ pipeline {
             mail bcc: '', body: "<b>Example</b><br><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: "ROLLED BACK CI: Project name -> ${env.JOB_NAME}", to: "avashisth@semprautilities.com";
         }
     }
-}
 }
