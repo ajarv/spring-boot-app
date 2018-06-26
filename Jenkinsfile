@@ -5,7 +5,7 @@ pipeline {
             agent {
                 docker {
                     image 'gradle:jdk8-alpine' 
-                    args '-v /var/jenkins_home/.m2:/root/.m2' 
+                    args '-u root -v /var/jenkins_home/.m2:/root/.m2' 
                 }
             }
             steps {
@@ -15,12 +15,15 @@ pipeline {
         stage('Package Docker Image') { 
             agent {
                 docker {
-                    image 'gradle:jdk8-alpine' 
-                    args '-v /var/jenkins_home/.m2:/root/.m2' 
+                    image 'jenkinsci/blueocean' 
+                    args '-v /var/run/docker.sock:/var/run/docker.sock' 
                 }
             }
             steps {
                 echo 'Building Docker'
+                sh 'pwd'
+                sh 'ls -al'
+                sh 'docker'
                 sleep 20
             }
         }
