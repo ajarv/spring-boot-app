@@ -8,7 +8,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'Running Integration Tests'
+                echo 'Running Integration Tests'
                 sh 'python ./integration-test-scripts/test01.py'
             }
         }
