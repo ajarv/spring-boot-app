@@ -20,7 +20,6 @@ pipeline {
             steps {
                 sh '''
                 echo "Preparing Docker Build Folder"
-                sh mkdir -p /var/jenkins_home/jobs/springboot-java-app/workspace
                 sh gradle dockerPrepare
                 '''
             }
