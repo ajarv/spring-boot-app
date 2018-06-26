@@ -20,7 +20,8 @@ pipeline {
             steps {
                 sh '''
                 echo "Preparing Docker Build Folder"
-                sh gradle dockerPrepare
+                gradle dockerPrepare
+                gradle docker_image --stacktrace
                 '''
             }
         }
