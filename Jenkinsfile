@@ -84,16 +84,6 @@ pipeline {
                 sh 'py.test --verbose --junit-xml test-reports/results.xml ./integration-test-scripts/test01.py'
             }
         }        
-        stage('Run Integration Tests'){
-             agent {
-                docker {
-                    image 'qnib/pytest'
-                }
-            }
-            steps {
-                sh 'py.test --verbose --junit-xml test-reports/results.xml ./integration-test-scripts/test01.py'
-            }
-        }        
     }
     post {
         always {
@@ -113,4 +103,5 @@ pipeline {
             mail bcc: '', body: "<b>Example</b><br><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: "ROLLED BACK CI: Project name -> ${env.JOB_NAME}", to: "avashisth@semprautilities.com";
         }
     }
+}
 }
