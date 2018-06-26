@@ -27,7 +27,12 @@ pipeline {
         stage('Build Image') { 
             agent none
             steps {
-                sh 'pwd;ls -al'
+                sh '''
+                pwd
+                . ./gradle.properties
+                cd build/docker
+                docker build -t summer-sdge/gs-spring-boot-docker:test  .
+                '''
             }
         }
     }
