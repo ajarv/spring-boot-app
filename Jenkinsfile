@@ -6,24 +6,6 @@ pipeline {
         }
     }
     stages {
-        stage('Build Classes') { 
-            steps {
-                sh 'gradle classes' 
-            }
-        }
-        stage('Run Tests') { 
-            steps {
-                sh 'gradle test' 
-            }
-        }
-        stage('Prepare Folder') { 
-            steps {
-                sh '''
-                echo "Preparing Docker Build Folder"
-                gradle dockerPrepare
-                '''
-            }
-        }
         stage('Build Image') { 
             agent {
                 docker {
