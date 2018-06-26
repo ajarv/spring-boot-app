@@ -11,45 +11,6 @@ def loadProperties() {
 pipeline {
     agent none
     stages {
-        stage('Build - Unit Test') { 
-            agent {
-                docker {
-                    image 'gradle:jdk8-alpine' 
-                    args '-u root -v /var/jenkins_home/.m2:/root/.m2' 
-                }
-            }
-            steps {
-                sh 'gradle build' 
-            }
-        }
-        stage('Prepare Docker Files') { 
-            agent {
-                docker {
-                    image 'gradle:jdk8-alpine' 
-                    args '-u root -v /var/jenkins_home/.m2:/root/.m2' 
-                }
-            }
-            steps {
-                sh 'gradle dockerPrepare' 
-            }
-        }
-        stage('Build Docker Image') { 
-            agent {
-                docker {
-                    image 'jenkinsci/blueocean' 
-                    args '-v /var/run/docker.sock:/var/run/docker.sock' 
-                }
-            }
-            steps {
-                echo 'Building Docker Image'
-                script {
-                    loadProperties()
-                    echo "New appReleaseVersion ${properties.appReleaseVersion}"
-                }
-                echo "Building Docker Image with tag label ${properties.appReleaseVersion}" 
-                sh "docker build -t summer-sdge/gs-spring-boot-docker:${properties.appReleaseVersion} ./build/docker"
-            }
-        }
         stage('Deploy in Dev') { 
             agent {
                 docker {
@@ -63,7 +24,7 @@ pipeline {
                     echo "New appReleaseVersion ${properties.appReleaseVersion}"
                     echo "Existing appReleaseVersionCurrent ${properties.appReleaseVersionCurrent}"
                 }
-                echo "Attempting to stop existing docker instance ${env.appReleaseVersion}"
+                echo "Attempting to stop existing docker instance with name ${properties.appName}"
                 sh "docker rm -f --name ${properties.appName} >> /dev/null ; echo \$?"
                 sleep 4
                 echo 'Start new container version'
