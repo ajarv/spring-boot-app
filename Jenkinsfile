@@ -3,7 +3,7 @@ properties = null
 
 def loadProperties() {
     node {
-        checkout scm
+        // checkout scm
         properties = readProperties file: 'gradle.properties'
     }
 }
