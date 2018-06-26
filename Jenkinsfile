@@ -4,12 +4,16 @@ pipeline {
         stage('Run Integration Tests'){
              agent {
                 docker {
-                    image 'python:2-alpine'
+                    image 'qnib/pytest'
                 }
             }
             steps {
-                echo 'Running Integration Tests'
-                sh 'python ./integration-test-scripts/test01.py'
+                sh 'py.test --verbose --junit-xml test-reports/results.xml ./integration-test-scripts/test01.py'
+            }
+            post {
+                always {
+                    junit 'test-reports/results.xml'
+                }
             }
         }
     }
