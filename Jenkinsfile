@@ -26,7 +26,9 @@ pipeline {
         }
         stage('Deploy in Dev') { 
             steps {
-                echo 'Deploying Docker Image'
+                echo 'Stop the previous container version if running'
+                sleep 20
+                echo 'Start new container version'
                 sleep 20
             }
         }
@@ -43,7 +45,24 @@ pipeline {
                 always {
                     junit 'test-reports/results.xml'
                 }
+                success {
+                 // notify users when the Pipeline fails
+                    mail to: 'AVashisth@semprautilities.com',
+                        subject: "Success Pipeline: ${currentBuild.fullDisplayName}",
+                        body: "${env.BUILD_URL}"
+                }
+                failure {
+                 // notify users when the Pipeline fails
+                    mail to: 'AVashisth@semprautilities.com',
+                        subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+                        body: "Something is wrong with ${env.BUILD_URL}"
+                    echo "Rollback to previous version"
+                    echo "Undeploy Current Version"
+                    sleep 5
+                    echo "Deploy previous version"
+                    sleep 5
+                }
             }
-        }
+        }        
     }
 }
