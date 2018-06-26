@@ -31,7 +31,12 @@ pipeline {
                 }
             }
             steps {
-                echo 'Docker Test' 
+                echo 'Building Docker Image'
+                script {
+                    def props = readProperties file:'gradle.properties';
+                    env['appReleaseVersion'] = props['appReleaseVersion'];
+                }
+                echo 'App Release Version ${env.appReleaseVersion}' 
                 sh 'docker build -t summer-sdge/gs-spring-boot-docker:1.0.1 ./build/docker' 
             }
         }
@@ -44,6 +49,10 @@ pipeline {
             }
             steps {
                 echo 'Building Docker'
+                script {
+                    def props = readProperties file:'gradle.properties';
+                    env['appReleaseVersion'] = props['appReleaseVersion'];
+                }
                 sh 'pwd'
                 sh 'ls -al'
                 sh 'docker'
