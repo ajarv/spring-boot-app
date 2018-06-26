@@ -30,7 +30,6 @@ println "appReleaseVersion : ${appReleaseVersion}"
 bootJar {
     baseName = 'gs-spring-boot-docker'
     version =  '0.1.0'
-    // version =  '${appReleaseVersion}'
 }
 
 // tag::task[]
@@ -40,7 +39,21 @@ docker {
     files bootJar.archivePath
     buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
 }
+
 // end::task[]
+
+ext {
+    docker_image_tag = "${project.group}/${bootJar.baseName}:${appReleaseVersion}"
+}   
+println ("Docker Image Tag: ${docker_image_tag}")
+task docker_image(type:Exec) {
+  dependsOn build
+  //on windows:
+  commandLine 'docker', 'build', '-t', "${docker_image_tag}" , 'C:\\temp\\jenkins-data\\jobs\\springboot-java-app\\workspace\\build\\docker'
+  ext.output = {
+    return standardOutput.toString()
+  }
+}
 
 repositories {
     mavenCentral()
