@@ -18,9 +18,11 @@ pipeline {
         }
         stage('Prepare Folder') { 
             steps {
-                sh 'Preparing Docker Build Folder'
+                sh '''
+                Preparing Docker Build Folder'
                 sh 'mkdir -p /var/jenkins_home/jobs/springboot-java-app/workspace'
-                sh 'gradle dockerPrepare'
+                sh 'gradle dockerPrepare
+                '''
             }
         }
         stage('Build Image') { 
