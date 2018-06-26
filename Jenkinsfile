@@ -46,8 +46,8 @@ pipeline {
                     loadProperties()
                     echo "New appReleaseVersion ${properties.appReleaseVersion}"
                 }
-                echo 'Building Docker Image with tag label ${properties.appReleaseVersion}' 
-                sh 'docker build -t summer-sdge/gs-spring-boot-docker:${properties.appReleaseVersion} ./build/docker' 
+                echo "Building Docker Image with tag label ${properties.appReleaseVersion}" 
+                sh "docker build -t summer-sdge/gs-spring-boot-docker:${properties.appReleaseVersion} ./build/docker"
             }
         }
         stage('Deploy in Dev') { 
@@ -63,11 +63,11 @@ pipeline {
                     echo "New appReleaseVersion ${properties.appReleaseVersion}"
                     echo "Existing appReleaseVersionCurrent ${properties.appReleaseVersionCurrent}"
                 }
-                echo 'Attempting to stop existing docker instance ${env.appReleaseVersion}' 
-                sh 'docker rm -f --name ${properties.appName} >> /dev/null ; echo \$?'
+                echo "Attempting to stop existing docker instance ${env.appReleaseVersion}"
+                sh "docker rm -f --name ${properties.appName} >> /dev/null ; echo \$?"
                 sleep 4
                 echo 'Start new container version'
-                sh 'docker run -t --rm --name ${properties.appName} summer-sdge/gs-spring-boot-docker:${properties.appReleaseVersion}'
+                sh "docker run -t --rm --name ${properties.appName} summer-sdge/gs-spring-boot-docker:${properties.appReleaseVersion}"
                 echo 'New Version Started'
             }
         }
