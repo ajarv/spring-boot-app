@@ -15,7 +15,7 @@ public class Greeting {
     public Greeting(long id, String content) {
         this.id = id;
         this.content = content;
-        this.version = "2.0";
+        this.version = "3.0";
     }
 	public Greeting(long id, String version, String content) {
 		super();
