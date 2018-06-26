@@ -13,6 +13,12 @@ pipeline {
             }
         }
         stage('Docker Test') { 
+            agent {
+                docker {
+                    image 'jenkinsci/blueocean' 
+                    args '-v /var/run/docker.sock:/var/run/docker.sock' 
+                }
+            }
             steps {
                 echo 'Docker Test' 
                 sh 'docker ps' 
