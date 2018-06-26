@@ -6,16 +6,36 @@ pipeline {
         }
     }
     stages {
-        
+        stage('Build Classes') { 
+            steps {
+                sh 'gradle classes' 
+            }
+        }
+        stage('Run Tests') { 
+            steps {
+                sh 'gradle test' 
+            }
+        }
+        stage('Prepare Folder') { 
+            steps {
+                sh '''
+                echo "Preparing Docker Build Folder"
+                gradle dockerPrepare
+                '''
+            }
+        }
         stage('Build Image') { 
-            agent none
+            agent {
+                docker {
+                    image 'jenkinsci/blueocean' 
+                    args '-u root -v /var/run/docker.sock:/var/run/docker.sock' 
+                }
+            }
             steps {
                 sh '''
                 pwd
-                . ./gradle.properties
                 cd build/docker
-                which docker            
-                // docker build -t summer-sdge/gs-spring-boot-docker:test  .
+                docker
                 '''
             }
         }
