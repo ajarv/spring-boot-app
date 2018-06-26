@@ -18,10 +18,12 @@ pipeline {
         }
         stage('Build Package with label') { 
             steps {
-                sh 'echo "Preparing Docker Staging Directory"'
-                sh 'gradle dockerPrepare' 
-                sh 'echo "Executing Docker Image Build'
-                sh 'gradle docker_image' 
+                sh '''
+                echo "Preparing Docker Staging Directory"
+                gradle dockerPrepare
+                echo "Executing Docker Image Build
+                gradle docker_image
+                '''
             }
         }
 
