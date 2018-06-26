@@ -57,7 +57,7 @@ public class GreetingControllerTests {
 
         this.mockMvc.perform(get("/greeting").param("name", "Spring Community"))
                 .andDo(print()).andExpect(status().isOk())
-                .andExpect(jsonPath("$.version").value("2.0"));
+                .andExpect(jsonPath("$.version").value("3.0"));
     }
 
     
