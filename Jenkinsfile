@@ -24,11 +24,22 @@ pipeline {
                 '''
             }
         }
-        stage('Build Image') { 
+        stage('Build Docker Image') { 
             steps {
-                sh '''
-                docker 
-                '''
+                echo 'Building Docker'
+                sleep 20
+            }
+        }
+        stage('Deploy Image') { 
+            steps {
+                echo 'Deploying Docker Image'
+                sleep 20
+            }
+        }
+        state('Run Integration Tests'){
+            steps {
+                echo 'Running Integration Tests'
+                sleep 20
             }
         }
     }
