@@ -16,19 +16,15 @@ pipeline {
                 sh 'gradle test' 
             }
         }
-        stage('Build Package with label') { 
+        stage('Prepare Folder') { 
             steps {
-                sh '''
-                echo "Preparing Docker Staging Directory"
-
-                gradle dockerPrepare
-                
-                echo "Executing Docker Image Build"
-                
-                gradle docker_image
-                '''
+                sh 'gradle dockerPrepare'
             }
         }
-
+        stage('Build Image') { 
+            steps {
+                sh 'gradle docker_image'
+            }
+        }
     }
 }
