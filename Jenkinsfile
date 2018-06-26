@@ -63,12 +63,8 @@ pipeline {
                     echo "New appReleaseVersion ${properties.appReleaseVersion}"
                     echo "Existing appReleaseVersionCurrent ${properties.appReleaseVersionCurrent}"
                 }
-                try {
-                    echo 'Attempting to stop existing docker instance ${env.appReleaseVersion}' 
-                    sh "docker rm -f --name ${properties.appName}"
-                } catch (err) {
-                    echo "- No current instance found "
-                }
+                echo 'Attempting to stop existing docker instance ${env.appReleaseVersion}' 
+                sh "docker rm -f --name ${properties.appName} >> /dev/null ; echo $?"
                 sleep 4
                 echo 'Start new container version'
                 sh "docker run -t --rm --name ${properties.appName} summer-sdge/gs-spring-boot-docker:${properties.appReleaseVersion}"
