@@ -1,10 +1,12 @@
 properties = null
 
-def loadProperties(filePath) {
-    def properties = new Properties()
-    File propertiesFile = new File(filePath)
-    properties.load(propertiesFile.newDataInputStream())
-    return properties
+
+def loadProperties() {
+    node {
+        checkout scm
+        properties = readProperties file: 'gradle.properties'
+        echo "appReleaseVersion - ${properties.appReleaseVersion}"
+    }
 }
 
 pipeline {
@@ -42,8 +44,8 @@ pipeline {
             steps {
                 echo 'Building Docker Image'
                 script {
-                    def props = loadProperties filePath:'gradle.properties';
-                    env['appReleaseVersion'] = props['appReleaseVersion'];
+                    loadProperties()
+                    echo "appReleaseVersion ${properties.appReleaseVersion}"
                 }
                 echo 'App Release Version ${env.appReleaseVersion}' 
                 sh 'docker build -t summer-sdge/gs-spring-boot-docker:1.0.1 ./build/docker' 
