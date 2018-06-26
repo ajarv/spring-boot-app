@@ -6,18 +6,19 @@ pipeline {
         }
     }
     stages {
-        stage('Build Image') { 
-            agent {
-                docker {
-                    image 'jenkinsci/blueocean' 
-                    args '-u root -v /var/run/docker.sock:/var/run/docker.sock' 
-                }
-            }
+        stage('Prepare Folder') { 
             steps {
                 sh '''
-                pwd
-                cd build/docker
-                docker
+                echo "Preparing Docker Build Folder"
+                gradle dockerPrepare
+                '''
+            }
+        }
+        stage('Build Image') { 
+            agent none
+            steps {
+                sh '''
+                gradle docker
                 '''
             }
         }
