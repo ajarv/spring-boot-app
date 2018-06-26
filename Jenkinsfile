@@ -68,7 +68,7 @@ pipeline {
                 sh "docker rm -f ${properties.appName} >> /dev/null || exit 0"
                 sleep 4
                 echo 'Start new container version'
-                sh "docker run -t -d --rm --name ${properties.appName} summer-sdge/gs-spring-boot-docker:${properties.appReleaseVersion}"
+                sh "docker run -t -d --rm -p 9080:8080 --name ${properties.appName} summer-sdge/gs-spring-boot-docker:${properties.appReleaseVersion}"
                 echo 'New Version Started'
             }
         }
