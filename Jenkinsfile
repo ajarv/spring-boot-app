@@ -25,12 +25,7 @@ pipeline {
             }
         }
         stage('Build Image') { 
-            agent {
-                docker {
-                    image 'jenkinsci/blueocean'
-                    args '-u root -v /var/run/docker.sock:/var/run/docker.sock -v /work:/work --entrypoint bash' 
-                }
-            }
+            agent none
             steps {
                 sh 'pwd;ls -al'
             }
