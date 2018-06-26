@@ -12,6 +12,12 @@ pipeline {
                 sh 'gradle build' 
             }
         }
+        stage('Docker Test') { 
+            steps {
+                echo 'Docker Test' 
+                sh 'docker ps' 
+            }
+        }
         stage('Package Docker Image') { 
             agent {
                 docker {
