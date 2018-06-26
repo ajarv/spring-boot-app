@@ -1,3 +1,12 @@
+properties = null
+
+def loadProperties(filePath) {
+    def properties = new Properties()
+    File propertiesFile = new File(filePath)
+    properties.load(propertiesFile.newDataInputStream())
+    return properties
+}
+
 pipeline {
     agent none
     stages {
@@ -33,7 +42,7 @@ pipeline {
             steps {
                 echo 'Building Docker Image'
                 script {
-                    def props = readProperties file:'gradle.properties';
+                    def props = loadProperties filePath:'gradle.properties';
                     env['appReleaseVersion'] = props['appReleaseVersion'];
                 }
                 echo 'App Release Version ${env.appReleaseVersion}' 
