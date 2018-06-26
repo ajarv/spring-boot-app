@@ -36,7 +36,7 @@ pipeline {
                 sleep 20
             }
         }
-        state('Run Integration Tests'){
+        stage('Run Integration Tests'){
             steps {
                 echo 'Running Integration Tests'
                 sleep 20
