@@ -1,23 +1,35 @@
-node {
-
-   stage('Clone Repository') {
-        // Get some code from a GitHub repository
-        git 'https://github.com/ajarv/spring-boot-app'
-    
-   }
-   stage('Build Maven Image') {
-        docker.build("maven-build")
-   }
-   
-   stage('Run Maven Container') {
-       
-        //Run maven image
-        sh "docker run --rm --name maven-build-container maven-build"
-   }
-   
-   stage('Deploy Spring Boot Application') {
-        
-        sh "docker run  --rm --name java-deploy-container --volumes-from maven-build-container -d -p 9090:8080 summer-sdge/gs-spring-boot-docker:3.3.2"
-   }
-
+pipeline {
+    agent {
+        docker {
+            image 'gradle:jdk8-alpine' 
+            args '-v /var/jenkins_home/.m2:/root/.m2' 
+        }
+    }
+    stages {
+        stage('Build Classes') { 
+            steps {
+                sh 'gradle classes' 
+            }
+        }
+        stage('Run Tests') { 
+            steps {
+                sh 'gradle test' 
+            }
+        }
+        stage('Prepare Folder') { 
+            steps {
+                sh '''
+                echo "Preparing Docker Build Folder"
+                gradle dockerPrepare
+                '''
+            }
+        }
+        stage('Build Image') { 
+            steps {
+                sh '''
+                docker 
+                '''
+            }
+        }
+    }
 }
