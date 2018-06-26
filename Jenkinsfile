@@ -8,8 +8,8 @@ pipeline {
                 }
             }
             steps {
-                sh 'pwd '
-                sh 'ls -al'
+                sh 'Running Integration Tests'
+                sh 'python ./integration-test-scripts/test01.py'
             }
         }
     }

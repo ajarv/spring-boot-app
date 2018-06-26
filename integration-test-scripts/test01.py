@@ -3,7 +3,7 @@ import json
 import sys
 
 def t1():
-    conn = conn = httplib.HTTPConnection("localhost", 9080)
+    conn = conn = httplib.HTTPConnection("AJ006717", 9080)
     conn.request("GET", "/greeting")
     r1 = conn.getresponse()
     print r1.status, r1.reason
