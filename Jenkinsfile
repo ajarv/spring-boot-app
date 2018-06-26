@@ -12,7 +12,18 @@ pipeline {
                 sh 'gradle build' 
             }
         }
-        stage('Docker Test') { 
+        stage('Prepare Docker Files') { 
+            agent {
+                docker {
+                    image 'gradle:jdk8-alpine' 
+                    args '-u root -v /var/jenkins_home/.m2:/root/.m2' 
+                }
+            }
+            steps {
+                sh 'gradle dockerPrepare' 
+            }
+        }
+        stage('Build Docker Image') { 
             agent {
                 docker {
                     image 'jenkinsci/blueocean' 
@@ -21,7 +32,7 @@ pipeline {
             }
             steps {
                 echo 'Docker Test' 
-                sh 'docker ps' 
+                sh 'docker build -t summer-sdge/gs-spring-boot-docker:1.0.1 ./build/docker' 
             }
         }
         stage('Package Docker Image') { 
