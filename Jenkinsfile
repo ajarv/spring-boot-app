@@ -11,6 +11,46 @@ def loadProperties() {
 pipeline {
     agent none
     stages {
+        stage('Build - Unit Test') { 
+            agent {
+                docker {
+                    image 'gradle:jdk8-alpine' 
+                    args '-u root -v /var/jenkins_home/.m2:/root/.m2' 
+                }
+            }
+            steps {
+                sh 'gradle build' 
+            }
+        }
+        stage('Prepare Docker Files') { 
+            agent {
+                docker {
+                    image 'gradle:jdk8-alpine' 
+                    args '-u root -v /var/jenkins_home/.m2:/root/.m2' 
+                }
+            }
+            steps {
+                sh 'gradle dockerPrepare' 
+            }
+        }
+        stage('Build Docker Image') { 
+            agent {
+                docker {
+                    image 'jenkinsci/blueocean' 
+                    args '-v /var/run/docker.sock:/var/run/docker.sock' 
+                }
+            }
+            steps {
+                echo 'Building Docker Image'
+                script {
+                    loadProperties()
+                    echo "New appReleaseVersion ${properties.appReleaseVersion}"
+                }
+                echo "Building Docker Image with tag label ${properties.appReleaseVersion} -- broken"
+                echo "Assume build" 
+                // sh "docker build -t summer-sdge/gs-spring-boot-docker:${properties.appReleaseVersion} ./build/docker"
+            }
+        }
         stage('Deploy in Dev') { 
             agent {
                 docker {
@@ -28,7 +68,7 @@ pipeline {
                 sh "docker rm -f ${properties.appName} >> /dev/null || exit 0"
                 sleep 4
                 echo 'Start new container version'
-                sh "docker run -t --rm --name ${properties.appName} summer-sdge/gs-spring-boot-docker:${properties.appReleaseVersion}"
+                sh "docker run -t -d --rm --name ${properties.appName} summer-sdge/gs-spring-boot-docker:${properties.appReleaseVersion}"
                 echo 'New Version Started'
             }
         }
